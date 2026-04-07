@@ -5,9 +5,14 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      alert("Please fill all fields");
+      return;
+    }
     const res = await fetch("http://localhost:5911/api/auth/login", {
       method: "POST",
       headers: {
@@ -46,6 +51,15 @@ export default function Login() {
         >
           Login
         </button>
+        <p className="mt-4 text-sm text-center">
+          Don't have an account?{" "}
+          <span
+            className="text-blue-500 cursor-pointer"
+            onClick={() => navigate("/register")}
+          >
+            Create account
+          </span>
+        </p>
       </div>
     </div>
   );
