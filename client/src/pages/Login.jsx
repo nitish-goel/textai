@@ -7,9 +7,18 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // later connect API
-    localStorage.setItem("token", "abc123");
+  const handleLogin = async () => {
+    const res = await fetch("http://localhost:5911/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+  
+    const data = await res.json();
+    console.log(data.token);
+    localStorage.setItem("token", data.token);
     navigate("/app");
   };
 
