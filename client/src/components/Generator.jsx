@@ -8,10 +8,41 @@ export default function Generator() {
     const [length, setLength] = useState("Short");
     const [output, setOutput] = useState("");
 
-    const handleGenerate = () => {
-        // later API call
-        setOutput("Generated LinkedIn post will appear here...");
-    };
+    // const handleGenerate = () => {
+    //     // later API call
+    //     setOutput("Generated LinkedIn post will appear here...");
+    // };
+    const handleGenerate = async () => {
+        try {
+          const token = localStorage.getItem("token");
+      
+          const res = await fetch("http://localhost:5000/api/generate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              topic: prompt,
+              tone,
+              length,
+            }),
+          });
+      
+          const data = await res.json();
+      
+          if (!res.ok) {
+            alert(data.message);
+            return;
+          }
+      
+          setOutput(data.content);
+      
+        } catch (error) {
+          console.error(error);
+          alert("Something went wrong");
+        }
+      };
 
     return (
         <div className="flex-1 p-6">
