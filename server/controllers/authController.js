@@ -10,24 +10,24 @@ export const registerUser = async (req, res) => {
     try {
       // 1. Check empty fields
       if (!email || !password) {
-        return res.status(400).json({ message: "All fields are required" });
+        return res.status(400).json({ status:"fail", message: "All fields are required" });
       }
   
       // 2. Email format check
       const emailRegex = /^\S+@\S+\.\S+$/;
       if (!emailRegex.test(email)) {
-        return res.status(400).json({ message: "Invalid email format" });
+        return res.status(400).json({ status:"fail", message: "Invalid email format" });
       }
   
       // 3. Password length
       if (password.length < 6) {
-        return res.status(400).json({ message: "Password must be at least 6 characters" });
+        return res.status(400).json({ status:"fail", message: "Password must be at least 6 characters" });
       }
   
       // 4. Check existing user
       const userExists = await User.findOne({ email });
       if (userExists) {
-        return res.status(400).json({ message: "User already exists" });
+        return res.status(400).json({ status:"fail", message: "User already exists" });
       }
   
       // 5. Hash password
@@ -44,10 +44,10 @@ export const registerUser = async (req, res) => {
         expiresIn: "7d",
       });
   
-      res.status(201).json({ token });
+      res.status(201).json({ token, status:"success", message: "Registeration successfull" });
   
     } catch (error) {
-      res.status(500).json({ message: "Server error" });
+      res.status(500).json({ status:"fail", message: "Server error" });
     }
   };
 
@@ -58,19 +58,19 @@ export const loginUser = async (req, res) => {
     try {
       // 1. Check empty
       if (!email || !password) {
-        return res.status(400).json({ message: "All fields are required" });
+        return res.status(400).json({ status:"fail", message: "All fields are required" });
       }
   
       // 2. Find user
       const user = await User.findOne({ email });
       if (!user) {
-        return res.status(400).json({ message: "User not found" });
+        return res.status(400).json({ status:"fail", message: "User not found" });
       }
   
       // 3. Compare password
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(400).json({ message: "Incorrect password" });
+        return res.status(400).json({ status:"fail", message: "Incorrect password" });
       }
   
       // 4. Token
@@ -78,9 +78,9 @@ export const loginUser = async (req, res) => {
         expiresIn: "7d",
       });
   
-      res.json({ token });
+      res.json({ token , status:"success", message: "Login successfull" });
   
     } catch (error) {
-      res.status(500).json({ message: "Server error" });
+      res.status(500).json({ status:"fail", message: "Server error" });
     }
   };

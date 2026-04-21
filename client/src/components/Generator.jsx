@@ -16,7 +16,7 @@ export default function Generator() {
         try {
           const token = localStorage.getItem("token");
       
-          const res = await fetch("http://localhost:5000/api/generate", {
+          const res = await fetch("http://localhost:5911/api/generate", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

@@ -22,9 +22,16 @@ export default function Login() {
     });
   
     const data = await res.json();
-    console.log(data.token);
-    localStorage.setItem("token", data.token);
-    navigate("/app");
+    // console.log(data);
+    if (data.status == 'success') {
+      alert(data.message);
+      localStorage.setItem("token", data.token);
+      navigate("/app");
+    }else{
+      alert(data.message);
+      return;
+    }
+    
   };
 
   return (

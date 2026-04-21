@@ -34,16 +34,22 @@ export default function Register() {
 
       const data = await res.json();
 
-      if (!res.ok) {
+      // if (!res.ok) {
+      //   alert(data.message);
+      //   return;
+      // }
+      if (data.status == 'success') {
+        alert(data.message);
+
+        // ✅ Save token
+        localStorage.setItem("token", data.token);
+        // ✅ Redirect
+        navigate("/app");
+      }else{
         alert(data.message);
         return;
       }
-
-      // ✅ Save token
-      localStorage.setItem("token", data.token);
-
-      // ✅ Redirect
-      navigate("/app");
+      
 
     } catch (error) {
       console.error(error);
